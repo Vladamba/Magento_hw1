@@ -1,0 +1,16 @@
+deleteProductBySku(string $sku)
+
+в этом метоже моно сделать 
+$productForDelete = $this->productRepository->get($sku);
+
+сделай проверку что проект существует  и затем удали
+не надо поисков и циклов, sku уникальный, я описывал что это идет как ID,  только публичный
+
+
+getProducts($count)
+
+->>>>>>>>>>>>>>>> $searchCriteria = $this->objectFactory->create(SearchCriteriaInterface::class, []);
+вместо этого подключи сразу $searchCriteriaFactory и в коде делай $searchCriteria = $searchCriteriaFactory->create....
+
+
+по остальному в целом неплохо, обрати внимание на PS standards
