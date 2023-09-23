@@ -15,5 +15,5 @@ interface ProductRepositoryInterface
      * @param string $sku
      * @return bool
      */
-    public function deleteProductBySku(string $sku);
+    public function deleteProductBySku(string $sku): bool;
 }

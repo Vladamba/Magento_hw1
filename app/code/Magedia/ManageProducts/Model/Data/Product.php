@@ -10,7 +10,7 @@ class Product extends DataObject implements ProductInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->getData('id');
     }
@@ -19,7 +19,7 @@ class Product extends DataObject implements ProductInterface
      * @param int $id
      * @return $this
      */
-    public function setId($id)
+    public function setId($id): ProductInterface
     {
         return $this->setData('id', $id);
     }
@@ -27,7 +27,7 @@ class Product extends DataObject implements ProductInterface
     /**
      * @return string
      */
-    public function getSku()
+    public function getSku(): string
     {
         return $this->getData('sku');
     }
@@ -36,7 +36,7 @@ class Product extends DataObject implements ProductInterface
      * @param string $sku
      * @return $this
      */
-    public function setSku($sku)
+    public function setSku($sku): ProductInterface
     {
         return $this->setData('sku', $sku);
     }
@@ -44,7 +44,7 @@ class Product extends DataObject implements ProductInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getData('name');
     }
@@ -53,7 +53,7 @@ class Product extends DataObject implements ProductInterface
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName($name): ProductInterface
     {
         return $this->setData('name', $name);
     }
@@ -61,7 +61,7 @@ class Product extends DataObject implements ProductInterface
     /**
      * @return int
      */
-    public function getQty()
+    public function getQty(): int
     {
         return $this->getData('qty');
     }
@@ -70,7 +70,7 @@ class Product extends DataObject implements ProductInterface
      * @param int $qty
      * @return $this
      */
-    public function setQty($qty)
+    public function setQty($qty): ProductInterface
     {
         return $this->setData('qty', $qty);
     }
@@ -78,7 +78,7 @@ class Product extends DataObject implements ProductInterface
     /**
      * @return string
      */
-    public function getPrice()
+    public function getPrice(): string
     {
         return $this->getData('price');
     }
@@ -87,7 +87,7 @@ class Product extends DataObject implements ProductInterface
      * @param string $price
      * @return $this
      */
-    public function setPrice($price)
+    public function setPrice($price): ProductInterface
     {
         return $this->setData('price', $price);
     }

@@ -4,19 +4,17 @@ namespace Magedia\ManageProducts\Model;
 
 use Magedia\ManageProducts\Api\Data\ProductInterface;
 use Magedia\ManageProducts\Api\Data\ProductInterfaceFactory;
-use Magedia\ManageProducts\Api\ProductRepositoryInterface;
+use Magedia\ManageProducts\Api\ProductRepositoryInterface as MyProductRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Api\Filter;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\ObjectFactory;
+use Magento\Framework\Api\SearchCriteriaInterfaceFactory;
 
-class ProductRepository implements ProductRepositoryInterface
+class ProductRepository implements MyProductRepositoryInterface
 {
     /**
-     * @var ObjectFactory
+     * @var SearchCriteriaInterfaceFactory
      */
-    private $objectFactory;
+    private $searchCriteriaInterfaceFactory;
 
     /**
      * @var ProductInterfaceFactory
@@ -24,23 +22,23 @@ class ProductRepository implements ProductRepositoryInterface
     private $productInterfaceFactory;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var MyProductRepositoryInterface
      */
     private $productRepository;
 
     /**
-     * ProductRepository constructor
+     * @param ProductRepositoryInterface $productRepository
      * @param ProductInterfaceFactory $productInterfaceFactory
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param SearchCriteriaInterfaceFactory $searchCriteriaInterfaceFactory
      */
     public function __construct(
-        ObjectFactory                                   $objectFactory,
-        ProductInterfaceFactory                         $productInterfaceFactory,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository)
+        ProductRepositoryInterface     $productRepository,
+        ProductInterfaceFactory        $productInterfaceFactory,
+        SearchCriteriaInterfaceFactory $searchCriteriaInterfaceFactory)
     {
-        $this->objectFactory = $objectFactory;
-        $this->productInterfaceFactory = $productInterfaceFactory;
         $this->productRepository = $productRepository;
+        $this->productInterfaceFactory = $productInterfaceFactory;
+        $this->searchCriteriaInterfaceFactory = $searchCriteriaInterfaceFactory;
     }
 
     /**
@@ -50,16 +48,9 @@ class ProductRepository implements ProductRepositoryInterface
     public function getProducts(int $count)
     {
         /**
-         * @var SortOrder $sortOrder
-         */
-        $sortOrder = $this->objectFactory->create(SortOrder::class, []);
-        $sortOrder->setField("id")->setDirection("ASC");
-
-        /**
          * @var SearchCriteriaInterface $searchCriteria
          */
-        $searchCriteria = $this->objectFactory->create(SearchCriteriaInterface::class, []);
-        $searchCriteria->setSortOrders([$sortOrder]);
+        $searchCriteria = $this->searchCriteriaInterfaceFactory->create();
         $searchCriteria->setPageSize($count);
 
         /**
@@ -73,7 +64,6 @@ class ProductRepository implements ProductRepositoryInterface
         $productInterfaceArray = [];
 
         foreach ($products as $product) {
-            //echo $product->getId() . PHP_EOL;
             $productInterface = $this->productInterfaceFactory->create();
             $productInterface->setId($product->getId());
             $productInterface->setSku($product->getSku());
@@ -82,7 +72,6 @@ class ProductRepository implements ProductRepositoryInterface
             $productInterface->setPrice($product->getPrice());
             $productInterfaceArray[] = $productInterface;
         }
-
         return $productInterfaceArray;
     }
 
@@ -90,42 +79,13 @@ class ProductRepository implements ProductRepositoryInterface
      * @param string $sku
      * @return bool
      */
-    public function deleteProductBySku(string $sku)
+    public function deleteProductBySku(string $sku): bool
     {
         /**
-         * @var  Filter $filter
+         * @var ProductInterface $product
          */
-        $filter = $this->objectFactory->create(Filter::class, []);
-        $filter->setField("sku")->setValue($sku)->setConditionType("eq");
+        $product = $this->productRepository->get($sku);
 
-        /**
-         * @var  FilterGroup $filterGroup
-         */
-        $filterGroup = $this->objectFactory->create(FilterGroup::class, []);
-        $filterGroup->setFilters([$filter]);
-
-        /**
-         * @var SearchCriteriaInterface $searchCriteria
-         */
-        $searchCriteria = $this->objectFactory->create(SearchCriteriaInterface::class, []);
-        $searchCriteria->setFilterGroups([$filterGroup]);
-
-        /**
-         * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterface $list
-         */
-        $list = $this->productRepository->getList($searchCriteria);
-
-        if ($list->getTotalCount() == 0) {
-            return false;
-        }
-        /**
-         * @var ProductInterface[] $products
-         */
-        $products = $list->getItems();
-        foreach ($products as $product) {
-            //echo $product->getSku() . PHP_EOL;
-            $this->productRepository->delete($product);
-        }
-        return true;
+        return $this->productRepository->delete($product);
     }
 }
