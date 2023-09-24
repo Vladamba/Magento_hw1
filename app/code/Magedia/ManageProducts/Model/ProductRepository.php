@@ -8,13 +8,15 @@ use Magedia\ManageProducts\Api\ProductRepositoryInterface as MyProductRepository
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteriaInterfaceFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 
 class ProductRepository implements MyProductRepositoryInterface
 {
     /**
-     * @var SearchCriteriaInterfaceFactory
+     * @var MyProductRepositoryInterface
      */
-    private $searchCriteriaInterfaceFactory;
+    private $productRepository;
 
     /**
      * @var ProductInterfaceFactory
@@ -22,9 +24,9 @@ class ProductRepository implements MyProductRepositoryInterface
     private $productInterfaceFactory;
 
     /**
-     * @var MyProductRepositoryInterface
+     * @var SearchCriteriaInterfaceFactory
      */
-    private $productRepository;
+    private $searchCriteriaInterfaceFactory;
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -58,26 +60,14 @@ class ProductRepository implements MyProductRepositoryInterface
          */
         $products = $this->productRepository->getList($searchCriteria)->getItems();
 
-        /**
-         * @var ProductInterface[] $productInterfaceArray
-         */
-        $productInterfaceArray = [];
-
-        foreach ($products as $product) {
-            $productInterface = $this->productInterfaceFactory->create();
-            $productInterface->setId($product->getId());
-            $productInterface->setSku($product->getSku());
-            $productInterface->setName($product->getName());
-            $productInterface->setQty($product->getQty());
-            $productInterface->setPrice($product->getPrice());
-            $productInterfaceArray[] = $productInterface;
-        }
-        return $productInterfaceArray;
+        return $products;
     }
 
     /**
      * @param string $sku
      * @return bool
+     * @throws NoSuchEntityException
+     * @throws StateException
      */
     public function deleteProductBySku(string $sku): bool
     {

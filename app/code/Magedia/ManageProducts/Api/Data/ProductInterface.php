@@ -13,7 +13,7 @@ interface ProductInterface
      * @param int $id
      * @return $this
      */
-    public function setId($id): ProductInterface;
+    public function setId(int $id): ProductInterface;
 
     /**
      * @return string
@@ -24,7 +24,7 @@ interface ProductInterface
      * @param string $sku
      * @return $this
      */
-    public function setSku($sku): ProductInterface;
+    public function setSku(string $sku): ProductInterface;
 
     /**
      * @return string
@@ -35,7 +35,7 @@ interface ProductInterface
      * @param string $name
      * @return $this
      */
-    public function setName($name): ProductInterface;
+    public function setName(string $name): ProductInterface;
 
     /**
      * @return int
@@ -46,7 +46,7 @@ interface ProductInterface
      * @param int $qty
      * @return $this
      */
-    public function setQty($qty): ProductInterface;
+    public function setQty(int $qty): ProductInterface;
 
     /**
      * @return string
@@ -57,5 +57,5 @@ interface ProductInterface
      * @param string $price
      * @return $this
      */
-    public function setPrice($price): ProductInterface;
+    public function setPrice(string $price): ProductInterface;
 }
