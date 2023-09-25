@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_login">
+        <observer name="AccountManagementPlugin_Login" instance="Magedia\AccountManagement\Observer\Login" />
+    </event>
     <event name="customer_logout">
-        <observer name="AccountManagementPlugin_Logout" type="Magedia\AccountManagement\Observer\Logout" />
+        <observer name="AccountManagementPlugin_Logout" instance="Magedia\AccountManagement\Observer\Logout" />
     </event>
 </config>

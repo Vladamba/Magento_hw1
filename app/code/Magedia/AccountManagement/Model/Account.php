@@ -19,9 +19,28 @@ class Account extends AbstractModel implements AccountInterface
     /**
      * @return int
      */
+    public function getId(): int
+    {
+        return $this->getData(AccountInterface::ID);
+    }
+
+
+    /**
+     * @param int $id
+     * @return $this
+     */
+    public function setId(mixed $id)
+    {
+        $this->setData(AccountInterface::ID, $id);
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getCustomerId(): int
     {
-        return $this->getData(AccountInterface::CUSTOMER_ID)
+        return $this->getData(AccountInterface::CUSTOMER_ID);
     }
 
     /**
