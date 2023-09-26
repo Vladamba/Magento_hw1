@@ -23,6 +23,7 @@ class Logout implements ObserverInterface
     {
         $this->accountRepository = $accountRepository;
     }
+
     public function execute(Observer $observer)
     {
         $customer = $observer->getData('customer');

@@ -69,12 +69,13 @@ class AccountRepository implements AccountRepositoryInterface
     public function save(int $customerId, string $ipAddress): AccountInterface
     {
         $collection = $this->accountCollectionFactory->create();
-        $id = 1;
-        foreach ($collection as $c) {
-            if ($c->getId() > $id) {
-                $id = $c->getId();
+        $id = 0;
+        foreach ($collection as $a) {
+            if ($a->getId() > $id) {
+                $id = $a->getId();
             }
         }
+        $id++;
 
         /**
          * @var AccountInterface $account
@@ -96,14 +97,9 @@ class AccountRepository implements AccountRepositoryInterface
     public function delete(int $customerId): void
     {
         $collection = $this->accountCollectionFactory->create();
-        foreach ($collection as $c) {
-            if ($c->getId() === $customerId) {
-                /**
-                 * @var AccountInterface $account
-                 */
-                $account = $this->accountFactory->create();
-                $account->setCustomerId($customerId);
-                $this->accountResource->delete($account);
+        foreach ($collection as $a) {
+            if ($a->getCustomerId() === $customerId) {
+                $this->accountResource->delete($a);
             }
         }
     }
@@ -115,8 +111,8 @@ class AccountRepository implements AccountRepositoryInterface
     public function checkIp(string $ipAddress): bool
     {
         $collection = $this->accountCollectionFactory->create();
-        foreach ($collection as $c) {
-            if ($c->getIpAddress() === $ipAddress) {
+        foreach ($collection as $a) {
+            if ($a->getIpAddress() === $ipAddress) {
                 return true;
             }
         }

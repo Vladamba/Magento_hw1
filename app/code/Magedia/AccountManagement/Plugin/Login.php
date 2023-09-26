@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Magedia\AccountManagement\Observer;
+namespace Magedia\AccountManagement\Plugin;
 
 use Magedia\AccountManagement\Model\AccountRepository;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
+use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
-use Magento\Framework\App\ResponseInterface;
 
-class Login implements ObserverInterface
+class Login
 {
     /**
      * @var AccountRepository $accountRepository
@@ -23,42 +22,37 @@ class Login implements ObserverInterface
      */
     private $remoteAddress;
 
-    /**
-     * @var ResponseInterface $response
-     */
-    private $response;
 
     /**
      * @param AccountRepository $accountRepository
      * @param RemoteAddress $remoteAddress
-     * @param ResponseInterface $response
      */
     public function __construct(
         AccountRepository $accountRepository,
-        RemoteAddress     $remoteAddress,
-        ResponseInterface $response)
+        RemoteAddress     $remoteAddress)
     {
         $this->accountRepository = $accountRepository;
         $this->remoteAddress = $remoteAddress;
-        $this->response = $response;
     }
 
     /**
-     * @param Observer $observer
-     * @return void
+     * @param AccountManagement $subject
+     * @param Customer $result
+     * @return Customer
      * @throws AlreadyExistsException
+     * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      */
-    public function execute(Observer $observer): void
+    public function afterAuthenticate(AccountManagement $subject, $result)
     {
-        $customer = $observer->getData('customer');
-        $customerId = $customer->getId();
         $ipAddress = $this->remoteAddress->getRemoteAddress();
 
         if ($this->accountRepository->checkIp($ipAddress)) {
-            $this->response->setRedirect('/', 301)->sendResponse();
-            die();
-        } else {
-            $this->accountRepository->save((int)$customerId, $ipAddress);
+            throw new \Magento\Framework\Exception\Plugin\AuthenticationException(__('Customer ip address is in the table'));
         }
+
+        $customerId = $result->getId();
+        $this->accountRepository->save((int)$customerId, $ipAddress);
+
+        return $result;
     }
 }

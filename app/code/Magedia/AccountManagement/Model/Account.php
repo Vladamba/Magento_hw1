@@ -9,6 +9,11 @@ use Magento\Framework\Model\AbstractModel;
 class Account extends AbstractModel implements AccountInterface
 {
     /**
+     * @var string $_idFieldName
+     */
+    protected $_idFieldName = AccountInterface::ID;
+
+    /**
      * @inheritdoc
      */
     protected function _construct()
@@ -23,7 +28,6 @@ class Account extends AbstractModel implements AccountInterface
     {
         return $this->getData(AccountInterface::ID);
     }
-
 
     /**
      * @param int $id

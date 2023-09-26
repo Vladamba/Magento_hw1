@@ -6,4 +6,8 @@
 
     <preference for="Magedia\AccountManagement\Api\AccountRepositoryInterface"
                 type="Magedia\AccountManagement\Model\AccountRepository"/>
+
+    <type name="Magento\Customer\Model\AccountManagement">
+        <plugin name="AccountManagementPlugin_Login" type="Magedia\AccountManagement\Plugin\Login" />
+    </type>
 </config>
