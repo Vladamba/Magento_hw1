@@ -25,9 +25,9 @@ interface AccountInterface
     const IP_ADDRESS = 'ip_address';
 
     /**
-     * @return int
+     * @return ?int
      */
-    public function getId(): int;
+    public function getId(): ?int;
 
     /**
      * @param int $id

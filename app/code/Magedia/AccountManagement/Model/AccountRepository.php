@@ -68,20 +68,10 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function save(int $customerId, string $ipAddress): AccountInterface
     {
-        $collection = $this->accountCollectionFactory->create();
-        $id = 0;
-        foreach ($collection as $a) {
-            if ($a->getId() > $id) {
-                $id = $a->getId();
-            }
-        }
-        $id++;
-
         /**
          * @var AccountInterface $account
          */
         $account = $this->accountFactory->create();
-        $account->setId($id);
         $account->setCustomerId($customerId);
         $account->setIpAddress($ipAddress);
 
