@@ -5,4 +5,12 @@
                 type="Magedia\ProductManagement\Model\ProductRepository" />
     <preference for="Magedia\ProductManagement\Api\Data\ProductInterface"
                 type="Magedia\ProductManagement\Model\Data\Product" />
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="magedia:show-products" xsi:type="object">Magedia\ProductManagement\Console\Command\ShowProducts</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
